@@ -1,0 +1,7 @@
+name: kara
+description: A sample web application
+dependencies:
+  browser: any
+  collection: any
+  stagexl:
+    path: ../StageXL
