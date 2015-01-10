@@ -88,7 +88,7 @@ class Scenario {
             actorList.add(new Mushroom(world, x, y));
             break;
           case Scenario.mushroomLeaf:
-            actorList.add(new Mushroom(world, x, y));
+            actorList.add(new Mushroom(world, x, y, onTarget: true));
             actorList.add(new Leaf(world, x, y));
             break;
           case Scenario.karaLeaf:

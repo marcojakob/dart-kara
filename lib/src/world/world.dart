@@ -1,5 +1,6 @@
 part of kara;
 
+/// This class creates a world for Kara and manages all other actors.
 class World extends Sprite {
 
   /// The maximum number of calls to Kara's action methods that are allowed
@@ -309,7 +310,7 @@ class World extends Sprite {
 
     if (_actionQueue.length > maxActActions) {
       // The maximum number of actions during one act()-call has been reached.
-      throw new ActOverflowException('Ihr Programm dauert zu lange oder beendet gar nicht!');
+      throw new ActOverflowException(messages.actOverflowException());
     }
   }
 
@@ -353,16 +354,20 @@ class KaraException implements Exception {
   /// Creates a new [KaraException] with an optional error [message].
   KaraException([this.message = '']);
 
-  String toString() => 'Kara Fehler: $message';
+  String toString() {
+    if (message != null && message.isNotEmpty) {
+      return message;
+    } else {
+      return messages.karaExceptionDefault();
+    }
+  }
 }
 
 /// Exception that is thrown when the user created an act()-method that does
 /// not terminate in a reasonable time. That means it calls more than the
 /// allowed number of Kara action methods ([maxActActions]).
 class ActOverflowException extends KaraException {
-
   ActOverflowException([String message = '']) : super(message);
-
 }
 
 /// Exception used to stop the execution inside the act()-method.

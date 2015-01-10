@@ -10,7 +10,7 @@ abstract class Kara extends Actor {
     // Check for a tree.
     if (treeFront()) {
       world.queueAction((spd) {
-        throw new KaraException('Kara kann sich nicht bewegen wegen einem Baum!');
+        throw new KaraException(messages.cantMoveBecauseOfTree());
       });
       stop();
     }
@@ -55,7 +55,7 @@ abstract class Kara extends Actor {
       } else {
         // Could not push the mushroom.
         world.queueAction((spd) {
-          throw new KaraException('Kara kann sich nicht bewegen, da er den Pilz nicht schieben kann!');
+          throw new KaraException(messages.cantMoveBecauseOfMushroom());
         });
         stop();
       }
@@ -72,7 +72,7 @@ abstract class Kara extends Actor {
     }
   }
 
-  /// Kara dreht sich um 90° nach links.
+  /// Kara turns left by 90 degrees.
   void turnLeft() {
     direction = (direction - 90) % 360;
 
@@ -82,7 +82,7 @@ abstract class Kara extends Actor {
     });
   }
 
-  /// Kara dreht sich um 90° nach rechts.
+  /// Kara turns right by 90 degrees.
   void turnRight() {
     direction = (direction + 90) % 360;
 
@@ -91,7 +91,7 @@ abstract class Kara extends Actor {
     });
   }
 
-  /// Kara legt ein neues Kleeblatt an die Position, auf der er sich befindet.
+  /// Kara puts down a leaf.
   void putLeaf() {
     if (!onLeaf()) {
       Leaf leaf = new Leaf(world, x, y);
@@ -102,13 +102,13 @@ abstract class Kara extends Actor {
       });
     } else {
       world.queueAction((spd) {
-        throw new KaraException('Kara kann kein Kleeblatt auf ein Feld legen, auf dem schon eines ist!');
+        throw new KaraException(messages.cantPutLeaf());
       });
       stop();
     }
   }
 
-  /// Kara entfernt ein unter ihm liegendes Kleeblatt.
+  /// Kara picks up a leaf.
   void removeLeaf() {
     Leaf leaf = world.getActorsAt(x, y).firstWhere((Actor a) => a is Leaf, orElse: () => null);
     if (leaf != null) {
@@ -119,38 +119,33 @@ abstract class Kara extends Actor {
       });
     } else {
       world.queueAction((spd) {
-        throw new KaraException('Kara kann hier kein Blatt auflesen!');
+        throw new KaraException(messages.cantRemoveLeaf());
       });
       stop();
     }
   }
 
-  /// Kara schaut nach, ob er sich auf einem Kleeblatt befindet. Gibt true
-  /// zurueck, wenn er auf einem Kleeblatt ist, sonst false.
+  /// Kara checks if he stands on a leaf.
   bool onLeaf() {
     return world.getActorsAt(x, y).any((Actor a) => a is Leaf);
   }
 
-  /// Kara schaut nach, ob sich ein Baum vor ihm befindet. Gibt true zurueck,
-  /// wenn er vor einem Baum steht, sonst false.
+  /// Kara checks if there is a tree in front of him.
   bool treeFront() {
     return world.getActorsInFront(x, y, direction).any((Actor a) => a is Tree);
   }
 
-  /// Kara schaut nach, ob sich ein Baum links von ihm befindet. Gibt true
-  /// zurueck, wenn links von ihm ein Baum steht, sonst false.
+  /// Kara checks if there is a tree on his left side.
   bool treeLeft() {
     return world.getActorsInFront(x, y, (direction - 90) % 360).any((Actor a) => a is Tree);
   }
 
-  /// Kara schaut nach, ob sich ein Baum rechts von ihm befindet. Gibt true
-  /// zurueck, wenn rechts von ihm ein Baum steht, sonst false.
+  /// Kara checks if there is a tree on his right side.
   bool treeRight() {
     return world.getActorsInFront(x, y, (direction + 90) % 360).any((Actor a) => a is Tree);
   }
 
-  /// Kara schaut nach, ob er einen Pilz vor sich hat. Gibt true zurueck, wenn
-  /// vor ihm ein Pilz steht, sonst false.
+  /// Kara checks if there is a mushroom in front of him.
   bool mushroomFront() {
     return world.getActorsInFront(x, y, direction).any((Actor a) => a is Mushroom);
   }
