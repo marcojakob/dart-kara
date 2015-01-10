@@ -2,12 +2,23 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 #stage {
   position: absolute;
+  top: 60px;
   width: 100%;
-  height: calc(100% - 60px);
+  height: calc(100% - 120px);
+}
+
+#title {
+  text-align: center;
+  margin-left: 5px;
+  margin-right: 5px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 #speed-slider {
@@ -20,6 +31,7 @@ body {
   max-width: 200px;
   margin-left: auto;
   margin-right: auto;
+  padding: 5px 0;
   vertical-align: middle;
 }
 

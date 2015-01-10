@@ -22,6 +22,9 @@ const String assetDir = 'packages/kara/assets';
 /// Size of a cell in pixels (must match the image sizes).
 const int cellSize = 28;
 
+/// Size of the cell border in pixels.
+const int cellBorderSize = 1;
+
 /// Initializes the world with the specified [scenario] and shows it.
 /// [kara] is the instance where the behaviour of Kara is programmed in.
 void start(Scenario scenario, Kara kara, [Duration speed = const Duration(milliseconds: 300)]) {

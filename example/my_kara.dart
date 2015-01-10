@@ -54,7 +54,7 @@ class MyKara extends Kara {
 }
 
 void main() {
-  start(scenario04b(), new MyKara(), new Duration(milliseconds: 1000));
+  start(scenario108(), new MyKara(), new Duration(milliseconds: 1000));
 }
 
 

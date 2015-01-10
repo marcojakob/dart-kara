@@ -47,6 +47,10 @@ class World extends Sprite {
   ///
   /// [speed] defines the initial speed.
   World(this.scenario, this.kara, this.speed) {
+    // Init the scenario title.
+    _initTitle();
+
+    // Init the stage.
     _initStage();
 
     // Init the speed slider.
@@ -87,9 +91,24 @@ class World extends Sprite {
     });
   }
 
+  /// Initializes the scenario title.
+  void _initTitle() {
+    // Create the title element and add it to the html body element.
+    html.Element titleElement = new html.Element.tag('h2')
+      ..id = 'title'
+      ..text = scenario.title;
+    html.document.body.children.add(titleElement);
+  }
+
   /// Initialize the [stage], [renderLoop], [juggler], and [resourceManager].
   void _initStage() {
-    stage = new Stage(html.querySelector('#stage'),
+    // Create the canvas element and add it to the html body element.
+    html.CanvasElement stageCanvas = new html.CanvasElement()
+      ..id = 'stage';
+    html.document.body.children.add(stageCanvas);
+
+    // Init the Stage.
+    stage = new Stage(stageCanvas,
         width: widthInPixels,
         height: heightInPixels,
         webGL: true);
@@ -105,10 +124,13 @@ class World extends Sprite {
   Future _loadAssets() {
     resourceManager
         ..addBitmapData('field', '$assetDir/images/field.png')
+        ..addBitmapData('border-top', '$assetDir/images/border-top.png')
+        ..addBitmapData('border-left', '$assetDir/images/border-left.png')
+        ..addBitmapData('border-corner', '$assetDir/images/border-corner.png')
         ..addBitmapData('kara', '$assetDir/images/kara.png')
         ..addBitmapData('leaf', '$assetDir/images/leaf.png')
         ..addBitmapData('mushroom', '$assetDir/images/mushroom.png')
-        ..addBitmapData('mushroom_on_target', '$assetDir/images/mushroom_on_target.png')
+        ..addBitmapData('mushroom-on-target', '$assetDir/images/mushroom-on-target.png')
         ..addBitmapData('tree', '$assetDir/images/tree.png');
 
     return resourceManager.load();
@@ -116,6 +138,8 @@ class World extends Sprite {
 
   /// Draws the worlds background.
   void _drawCells() {
+
+    // Draw the cells.
     for (int y = 0; y < scenario.height; y++) {
       for (int x = 0; x < scenario.width; x++) {
         var coords = cellToPixel(x, y);
@@ -128,6 +152,31 @@ class World extends Sprite {
         addChild(field);
       }
     }
+
+    // Draw the left border.
+    for (int y = 0; y < scenario.height; y++) {
+      var leftBorder = new Bitmap(resourceManager.getBitmapData('border-left'));
+      leftBorder
+          ..x = 0
+          ..y = y * cellSize + cellBorderSize;
+      addChild(leftBorder);
+    }
+
+    // Draw the top border.
+    for (int x = 0; x < scenario.width; x++) {
+      var topBorder = new Bitmap(resourceManager.getBitmapData('border-top'));
+      topBorder
+          ..x = x * cellSize + cellBorderSize
+          ..y = 0;
+      addChild(topBorder);
+    }
+
+    // Draw the corner.
+    var corner = new Bitmap(resourceManager.getBitmapData('border-corner'));
+    corner
+        ..x = 0
+        ..y = 0;
+    addChild(corner);
   }
 
   /// Returns the layer for the actor type.
@@ -193,14 +242,16 @@ class World extends Sprite {
   /// Translates a cell coordinate into pixel. This will return the coordinate
   /// of the center of the cell.
   static Point cellToPixel(num x, num y) {
-    return new Point(x * cellSize + (cellSize / 2), y * cellSize + (cellSize / 2));
+    return new Point(
+        x * cellSize + (cellSize / 2) + cellBorderSize,
+        y * cellSize + (cellSize / 2) + cellBorderSize);
   }
 
   /// Returns the world's width in pixels.
-  int get widthInPixels => scenario.width * cellSize;
+  int get widthInPixels => scenario.width * cellSize + cellBorderSize;
 
   /// Returns the world's height in pixels.
-  int get heightInPixels => scenario.height * cellSize;
+  int get heightInPixels => scenario.height * cellSize + cellBorderSize;
 
   /// The time when the next action may be executed, in milliseconds.
   num _nextActionTime = 0;

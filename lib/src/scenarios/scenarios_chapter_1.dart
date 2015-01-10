@@ -1,27 +1,30 @@
 part of kara.scenarios;
 
-Scenario scenario04a() {
+Scenario scenario101() {
   return new Scenario(
-      title: '04a Around Tree II',
+      title: 'Kara 1.01 - First Steps',
       width: 10,
-      height: 2,
+      height: 10,
+      karaDirection: directionRight,
       actors: r'''
 
 @# # #.
-''',
-      karaDirection: directionRight);
+''');
 }
 
-Scenario scenario04b() {
+Scenario scenario108() {
   return new Scenario(
-      title: '04b Around Tree II',
-      width: 20,
-      height: 2,
+      title: 'Kara 1.08 - Around Tree With Method',
+      width: 10,
+      height: 10,
+      karaDirection: directionRight,
       actors: r'''
 
-@ .. # # #.
-''',
-      karaDirection: directionRight);
+
+
+
+@  # # #.
+''');
 }
 
 Scenario scenario04c() {
